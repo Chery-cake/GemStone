@@ -1,0 +1,27 @@
+
+// variable
+byte i = 0;
+
+/*
+ * function
+ */
+byte test(byte x){
+	x = x + 0101;
+	return x;
+}
+
+byte  test2  (byte x)   {
+	x  = x  -   0010;
+	return    x;
+}
+
+void main(){
+	print("test");
+	{
+		print("test1");
+		print("test2");
+		print('\'');
+		print("\"");
+		print("   test   ola 54  {   }  ()");
+	}
+}

@@ -1,0 +1,8 @@
+# Configure
+cmake -DCMAKE_BUILD_TYPE=Debug -Bbuild
+
+# Build specific component
+cmake --build . --target scanner
+
+# Build everything
+cmake --build .
