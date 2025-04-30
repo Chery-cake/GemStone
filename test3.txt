@@ -1,0 +1,34 @@
+
+// Libraries
+#include <stantard>
+
+// variable
+byte v = 0;
+
+// array
+byte a[5] = {1,1,1};
+// 1 1 1 0 0
+
+// Function
+void function(byte &arg){
+     arg += 1;
+}
+
+/*
+ * Function with pointer
+ */
+void function2(byte *arg){
+     *arg += 1;
+}
+
+void main(){
+     byte *var;
+     printf("value: %i\n",*var);
+     printf("pointer: %i\n",var);
+     {
+        function(*var);
+        printf("value: %i\n",*var);
+     }
+     function2(var);
+     printf("value: %i\n",*var);
+}

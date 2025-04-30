@@ -27,6 +27,23 @@ Reader::Reader() {
 
 Reader::~Reader() {}
 
+bool checkString(std::ifstream &file, std::string &str_in) {
+  int size = str_in.size();
+  if (file.tellg() >= size) {
+    file.seekg(-size, file.cur);
+    std::string str;
+    for (int i = 0; i < size; i++) {
+      str.push_back(file.get());
+    }
+    if (str == str_in) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  return false;
+}
+
 void Reader::readFile(std::string path, std::vector<std::string> &tokens_out) {
 
   std::ifstream file(path);
@@ -36,36 +53,44 @@ void Reader::readFile(std::string path, std::vector<std::string> &tokens_out) {
     char c = 0;
     int blocks = 0;
 
-    bool b_comment_block = false;
-    bool b_comment_line = false;
+    bool comment_block = false;
+    bool comment_line = false;
 
     char p_c = 0; // previus char
 
-    while (file.get(c)) {
+    while (file.good() && file.get(c)) {
+
       if (c == open_block)
         blocks++;
       if (c == close_block)
         blocks--;
 
-      if ((p_c == comment_line[0]) && (c == comment_line[1])) {
-        token.pop_back();
-        b_comment_line = true;
+      if (checkString(file, this->comment_line)) {
+        token.erase(token.end() - (this->comment_line.size() - 1), token.end());
+        comment_line = true;
       }
-      if ((p_c == comment_block_open[0]) && (c == comment_block_open[1])) {
-        token.pop_back();
-        b_comment_block = true;
+      if (checkString(file, this->comment_block_open)) {
+        token.erase(token.end() - (this->comment_block_open.size() - 1),
+                    token.end());
+        comment_block = true;
       }
 
-      if ((!b_comment_line) && (!b_comment_block))
+      if ((!comment_line) && (!comment_block))
         token += c;
 
-      if ((b_comment_line) && (c == '\n'))
-        b_comment_line = false;
-      if ((p_c == comment_block_close[0]) && (c == comment_block_close[1]))
-        b_comment_block = false;
+      if ((comment_line) && (c == '\n'))
+        comment_line = false;
+      if (checkString(file, this->comment_block_close))
+        comment_block = false;
 
       if (blocks == 0) {
-        if ((c == end_line) || (c == close_block)) {
+        if (c == this->end_line) {
+          tokens_out.push_back(this->removeSpace(token));
+          token.clear();
+        }
+        if (c == close_block) {
+          if (file.peek() == this->end_line)
+            token += file.get();
           tokens_out.push_back(this->removeSpace(token));
           token.clear();
         }

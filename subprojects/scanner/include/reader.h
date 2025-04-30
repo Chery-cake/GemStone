@@ -5,9 +5,11 @@
 
 namespace scanner {
 
+using std::string;
+
 class Reader {
 private:
-  std::string removeSpace(std::string input, bool recursion = true);
+  string removeSpace(string input, bool recursion = true);
 
   char open_block;
   char close_block;

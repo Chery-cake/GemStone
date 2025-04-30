@@ -11,7 +11,6 @@ if(WIN32)
     add_definitions(-DCOMPILER_WINDOWS)
 else()
     add_definitions(-DCOMPILER_POSIX)
-    add_compile_options(-fvisibility=hidden)
 endif()
 
 # Build options

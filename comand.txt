@@ -2,7 +2,7 @@
 cmake -DCMAKE_BUILD_TYPE=Debug -Bbuild
 
 # Build specific component
-cmake --build . --target scanner
+cd build && make scanner
 
 # Build everything
-cmake --build .
+cd build && make all
